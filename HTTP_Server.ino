@@ -1,14 +1,16 @@
 char resp[256] = "123";
 
 // prepare message for ESP HTTP server
+/*
 void serialise_message() {
-	if (NULL == stmErrorResponce) {
+	if (NULL == stmErrorResponse) {
 		return;
 	}
 
 	String res = "";
+
 	for (int i = 0; i < 5; ++i) {
-		res += (String)stmErrorResponce[i];
+		res += (String)stmErrorResponse[i];
 		res += " ";
 	}
 
@@ -19,7 +21,7 @@ void serialise_message() {
 	Serial.println(res);
 	res.toCharArray(resp, res.length() + 1);
 
-	/*
+	
 	DynamicJsonDocument doc(1024);
 	for (int i = 0; i < 5; ++i) {
 		doc["error"][i] = stmErrorResponce[i];
@@ -29,13 +31,15 @@ void serialise_message() {
 	doc["pressure_3"] = pressure_3;
 
 	serializeJson(doc, resp);
-	*/
+
 
 }
+*/
 
 esp_err_t get_handler(httpd_req_t *req)
 {
-	serialise_message();
+
+	//serialise_message();
 	
     httpd_resp_send(req, resp, -1);
     return ESP_OK;

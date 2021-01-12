@@ -29,7 +29,7 @@ void uartSendBuffer(const float* data, const uint16_t dataSize, const uint16_t d
   currentSize += dataSize;
   Append_CRC16_Check_Sum(txBuffer, currentSize + SIZE_FRAMETAIL);
   currentSize += 2;
-  sparthan.write(txBuffer, currentSize);
+  sparthan.write(txBuffer, 64);
 }
 
 void* uartReceiveBuffer(uint8_t* recBuffer) {
@@ -48,10 +48,11 @@ void* uartReceiveBuffer(uint8_t* recBuffer) {
   uint8_t recTxCount = recBuffer[OFFSET_FRAME_SEQ];
   currentSize += sizeof recTxCount;
   uint16_t recBufferSize = SIZE_FRAMEHEAD + SIZE_FRAMEID + SIZE_FRAMETAIL + recDataSize;
-  Serial.println(recBufferSize);
+  //Serial.println(recBufferSize);
   // Checking CRC
   if (Verify_CRC8_Check_Sum(recBuffer, SIZE_FRAMEHEAD) && 
       Verify_CRC16_Check_Sum(recBuffer, recBufferSize)) {
+    Serial.println("passed CRC");
     currentSize +=  sizeof(uint8_t);
     uint16_t recDataType = 0;
     memcpy(&recDataType, recBuffer + currentSize, sizeof(uint16_t)); 
@@ -59,22 +60,14 @@ void* uartReceiveBuffer(uint8_t* recBuffer) {
     void * recData;
     recData = (void *)malloc(recDataSize);
     memcpy(recData, recBuffer + currentSize, recDataSize);
-    Serial.println("+");     
     return recData;
   }
 }
 
-float* uartReceiveBufferFromKirill() {
 
-    /*
-	do {
-		sof = sparthan.read();           
-		if (START_OF_FRAME == sof) {
-		break;
-		}
-      
-	} while (1);
-	*/
+/*
+float* uartReceiveBufferFromKirill(uint8_t* recBuffer) {
+
 
 	uint8_t* recBuffer = (uint8_t*)malloc(DATA_SIZE);    
 	if (0 != recBuffer) {
@@ -83,9 +76,9 @@ float* uartReceiveBufferFromKirill() {
 		float* recData;
 		recData = (float*)malloc(DATA_SIZE);
 		memcpy(recData, recBuffer, DATA_SIZE);
-		
-		//Serial.println(array2string(recData, 5));
-
 		return recData;
 	}
 }
+
+
+  */  
