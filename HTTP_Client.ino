@@ -24,21 +24,22 @@ String currCmd = "";
 String lastSentCmd = "";
 
 float finalCmD[5];
-int intCmd[5];
+float parsedCmd[5];
 
 void sendCmd2STM(String cmd) {
 	if (lastSentCmd == cmd) {
 		// don't send the same command over again 
 		return;	
 	}
-	Serial.println("cmd: " + cmd);
-	getIntCmd(cmd);
+	
+	parcCmdFromApp(cmd);
+	Serial.println(cmd);
 
-	finalCmD[0] = intCmd[4] * getFingerFBPos(0);
-	finalCmD[1] = intCmd[0] * getFingerFBPos(1);
-	finalCmD[2] = intCmd[2] * getFingerFBPos(2);
-	finalCmD[3] = intCmd[1] * getFingerFBPos(3);
-	finalCmD[4] = intCmd[3] * getFingerFBPos(4);
+	finalCmD[0] = parsedCmd[4] * getFingerFBPos(0);
+	finalCmD[1] = parsedCmd[0] * getFingerFBPos(1);
+	finalCmD[2] = parsedCmd[2] * getFingerFBPos(2);
+	finalCmD[3] = parsedCmd[1] * getFingerFBPos(3);
+	finalCmD[4] = parsedCmd[3] * getFingerFBPos(4);
 
 	uartSendBuffer(finalCmD, DATA_SIZE, FRAMEID_CMD_POS);
 	lastSentCmd = cmd;
@@ -52,12 +53,15 @@ void http_get() {
 		return;
 	}
 	int read_len = 0;
-	char buf[5] = {0};
-	read_len = esp_http_client_read(client, buf, 5);
+	char buf[64] = {0};
+	read_len = esp_http_client_read(client, buf, 64);
+	if (read_len < 10) {
+		return;
+	}
 	String payload(buf);
 	
 	lastCmd = currCmd;
-	currCmd = payload.substring(0, 5);		
+	currCmd = payload.substring(0, 64);		
 
 	//if (lastCmd == currCmd) {
 	sendCmd2STM(currCmd);
