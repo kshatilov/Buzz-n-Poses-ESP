@@ -4,7 +4,7 @@
 float calData[5] = {0., 0., 0., 0., 0.};
 
 float calibration_step[] = {0.002, 0.002, 0.002, 0.002, 0.002}; 
-float step_count[] = {7., 7., 6., 8.5, 8.};
+float step_count[] = {6., 3., 7., 12., 6.};
 
 const int BUFF_SIZE = 5 * sizeof(float) + 256; // make it big enough to hold your longest command
 static char buffer[BUFF_SIZE+1]; // +1 allows space for the null terminator
@@ -34,9 +34,9 @@ void moveFinger(int index, float position) {
 
 void serialPrintPosition() {
   
-  printf("*** Sending [");
+  printf("Sending [");
   for (int i = 0; i < 5; i++){
-    printf("%3.f, ", calData[i]);
+    printf("%.3f, ", calData[i]);
   }
   printf("] to STM\n");  
 }
@@ -129,9 +129,7 @@ void calibrate() {
         }   
       sendPosition();  
     } else {
-   
-   //   sparthan.write(str); // debug send/receive
-   //     Serial.println(str);
+
       printf("*** Unknown command\n");
  
       continue;

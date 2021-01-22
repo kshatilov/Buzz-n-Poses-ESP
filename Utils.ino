@@ -19,20 +19,29 @@ String array2string(int* a, int n) {
 	return out;
 }
 
-int* getIntCmd(String sCmd) {
+void getIntCmd(String sCmd) {
 	for (int i = 0; i < 5; ++i) {
-		intCmd[i] = ((String)sCmd.charAt(i)).toInt();
 	}
+}
+
+void parcCmdFromApp(String sCmd) {
+	String s = sCmd.substring(1, sCmd.length() - 1);
+	
+	char* p = (char*)malloc(64);
+	s.toCharArray(p, 64);
+	char* str;
+	int i = 0;
+	while ((str = strtok_r(p, ",", &p)) != NULL) {
+		parsedCmd[i] = ((String)str).toFloat();
+		i++;
+		if (i > 4) {
+			return;
+		}
+	}
+	free(p);
 }
 
 float* getFloatCmd(int *intCmd) {
 	float* floatCmd = (float*)malloc(5 * sizeof(float)); 
-	/* watch closely */
-	floatCmd[0] = intCmd[1] * getFingerFBPos(1);
-	floatCmd[1] = intCmd[3] * getFingerFBPos(3);
-	floatCmd[2] = intCmd[2] * getFingerFBPos(2);
-	floatCmd[3] = intCmd[4] * getFingerFBPos(4);
-	floatCmd[4] = intCmd[0] * getFingerFBPos(0);
-
 	
 }

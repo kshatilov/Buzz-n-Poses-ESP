@@ -64,21 +64,3 @@ void* uartReceiveBuffer(uint8_t* recBuffer) {
   }
 }
 
-
-/*
-float* uartReceiveBufferFromKirill(uint8_t* recBuffer) {
-
-
-	uint8_t* recBuffer = (uint8_t*)malloc(DATA_SIZE);    
-	if (0 != recBuffer) {
-		sparthan.readBytes(recBuffer, DATA_SIZE);
-	
-		float* recData;
-		recData = (float*)malloc(DATA_SIZE);
-		memcpy(recData, recBuffer, DATA_SIZE);
-		return recData;
-	}
-}
-
-
-  */  
